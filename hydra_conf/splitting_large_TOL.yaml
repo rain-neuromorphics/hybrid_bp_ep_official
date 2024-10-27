@@ -1,0 +1,34 @@
+defaults:
+    - algorithm: ep
+    - trainer: default
+    - data: cifar10
+    - model: splitting_large_6block
+    - _self_
+
+exp_type: "training"
+
+data:
+    config:
+        batch_size: 128
+algorithm:
+    config:
+        T2: 5
+model:
+    config:
+        T1: 1580
+        activation: 0.45
+        tol: 1e-4
+trainer:
+    epochs: 100
+    optimizer:
+        lr: 5e-5
+    scheduler:
+        config:
+            T_max: 100 
+            eta_min: 1e-6
+config:  
+    logger: wandb
+    device: 0
+    multiprocessing: false
+    save: false
+    project_name: splitting_large

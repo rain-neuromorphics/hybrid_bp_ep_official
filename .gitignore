@@ -1,0 +1,10 @@
+wandb/*
+*.ipynb
+*.pyc
+main-checkpoint.py
+outputs/*
+*.pyc
+tensorboard/*
+*.pth
+src/data/datasets/
+

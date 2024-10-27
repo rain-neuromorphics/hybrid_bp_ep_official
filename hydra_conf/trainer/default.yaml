@@ -1,0 +1,14 @@
+    epochs: 300
+    criterion: "cross_entropy" 
+    optimizer: 
+        name: "adam"
+        config: 
+            weight_decay: 3e-4
+        
+        lr: 5e-5
+            
+    scheduler:
+        name: "cosine"
+        config: 
+            T_max: 100
+            eta_min: 3e-6

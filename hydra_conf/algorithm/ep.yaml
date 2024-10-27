@@ -1,0 +1,7 @@
+name: "ep"
+
+config:
+    T2: 5
+    beta: 0.2
+    # use_autograd: false
+    

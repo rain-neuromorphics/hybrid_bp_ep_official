@@ -1,0 +1,23 @@
+defaults:
+    - algorithm: ep
+    - trainer: default
+    - data: cifar10
+    - model: static_gradient_analysis
+    - _self_
+
+exp_type: "gdd"
+
+data:
+    config:
+        batch_size: 2
+algorithm:
+    config:
+        T2: 20
+        beta: 0.02
+model:
+    config:
+        asynchronous: true   
+config:  
+    device: "cpu"
+    seed: 0
+    plotter: "paper"

@@ -1,0 +1,6 @@
+name: "imagenet32"
+config:
+    batch_size: 256
+    # directory: "~/Dev/imagenet32"
+    input_size: 32   
+    output_size: 1000

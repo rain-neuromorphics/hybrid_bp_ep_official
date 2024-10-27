@@ -1,0 +1,14 @@
+defaults:
+      - algorithm: ep
+      - trainer: default
+      - data: imagenet32
+      - model: splitting_small_1block_scellier
+      - _self_
+
+exp_type: "training"
+config:
+  logger: wandb
+  device: 0
+  multiprocessing: false
+  save: false
+  project_name: vgg16

@@ -1,0 +1,9 @@
+name: "bp"
+
+config:
+    T2: 0
+    beta: 0.2
+    biased_x: false
+    use_autograd: false
+    feedforward: true
+    

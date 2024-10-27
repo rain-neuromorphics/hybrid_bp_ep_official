@@ -1,0 +1,120 @@
+name: "vgg"
+config:
+    asynchronous: true
+    activation: 1.0
+    T1: 20
+    readout: true               
+    normalization:
+        neurons: 
+            name: "zeros"
+            config: 
+        weights:
+            name: "goe"
+            config: 
+                V: 0.000059
+                alphas: []
+
+blocks_config:
+
+    # First block
+    -   size: 32
+        channel: 3
+        channels: 
+            - 3
+            - 128
+            - 128
+            - 128
+            - 128
+        kernels:
+            - 3
+            - 3
+            - 3
+            - 3
+        strides:
+            - 1
+            - 1
+            - 1
+            - 1
+        paddings:
+            - 1
+            - 1
+            - 1
+            - 1
+        norm: "b"
+        pools: "--m-"
+        alphas:
+            - 0.99
+            - 0.99
+            - 0.99
+            - 0.99
+        clamp_last: false
+        fc: []
+    
+    # Second block
+    -   size: 16
+        channel: 128
+        channels:
+            - 128
+            - 256
+            - 256
+            - 256
+            - 256            
+        kernels:
+            - 3
+            - 3
+            - 3
+            - 3
+        strides: 
+            - 1
+            - 1
+            - 1
+            - 1
+        paddings:
+            - 1
+            - 1
+            - 1
+            - 1
+        clamp_last: false
+        alphas:
+            - 0.99
+            - 0.99
+            - 0.99
+            - 0.99
+        norm: "b"
+        pools: "m---"
+        fc: []
+
+    # Third block
+    -   size: 8
+        channel: 256
+        channels:
+            - 256
+            - 512
+            - 512
+            - 512
+            - 512
+        kernels:
+            - 3
+            - 3
+            - 3
+            - 3
+        strides: 
+            - 1
+            - 1
+            - 1
+            - 1
+        paddings:
+            - 1
+            - 1
+            - 1
+            - 1
+        clamp_last: false
+        alphas:
+            - 0.99
+            - 0.99
+            - 0.99
+            - 0.99
+        norm: "b"
+        pools: "m---"
+        fc: 
+            - 10

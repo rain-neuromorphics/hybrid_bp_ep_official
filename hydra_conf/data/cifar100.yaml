@@ -1,0 +1,6 @@
+name: "CIFAR100"
+config:
+    batch_size: 128
+    # directory: "~/Dev/cifar10_pytorch"
+    input_size: 32
+    output_size: 100

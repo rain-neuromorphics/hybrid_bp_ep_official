@@ -1,0 +1,30 @@
+defaults:
+    - algorithm: ep
+    - trainer: default
+    - data: cifar100
+    - model: scaling_small
+    - _self_
+
+exp_type: "training"
+
+data:
+    config:
+        batch_size: 256
+algorithm:
+    config:
+        T2: 5
+
+trainer:
+    epochs: 200
+    optimizer:
+        lr: 5e-5
+    scheduler:
+        config:
+            T_max: 200    
+            eta_min: 5e-7
+config:  
+    logger: null
+    device: 0
+    multiprocessing: false
+    save: false
+    project_name: scaling_small

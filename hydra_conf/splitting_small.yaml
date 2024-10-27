@@ -1,0 +1,30 @@
+defaults:
+    - algorithm: ep
+    - trainer: default
+    - data: cifar10
+    - model: splitting_large_3block
+    - _self_
+
+exp_type: "training"
+
+data:
+    config:
+        batch_size: 128
+algorithm:
+    config:
+        T2: 20
+
+trainer:
+    epochs: 200
+    optimizer:
+        lr: 0.0001
+    scheduler:
+        config:
+            T_max: 200    
+            eta_min: 1e-6
+config:  
+    logger: null
+    device: 0
+    multiprocessing: false
+    save: false
+    project_name: splitting_small
