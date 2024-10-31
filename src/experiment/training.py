@@ -7,18 +7,18 @@ import time
 from omegaconf import DictConfig, OmegaConf
 from typing import Optional
 from . import Experiment
-# from torch.utils.tensorboard import SummaryWriter
-# import wandb
+from torch.utils.tensorboard import SummaryWriter
+import wandb
 
 class TrainingExperiment(Experiment):
     """
     Class implementing a training experiment
-    
+
     Extra attributes (compared to parent class)
     ------------------------------------------
     logger (Optional[str]):
         logger type (if any)
-    
+
     Methods
     -------
     __init__:
@@ -28,9 +28,9 @@ class TrainingExperiment(Experiment):
     log_hparams_tb:
         logs hyperparameters when tensorboard is used
     """
-    
+
     def __init__(
-        self, 
+        self,
         cfg: DictConfig,
         logger: Optional[str] = None,
         project_name: str = "deep-eqprop",
@@ -38,7 +38,7 @@ class TrainingExperiment(Experiment):
         ) -> None:
         """
         Instantiates a TrainingExperiment object
-        
+
         Args:
             cfg (DictConfig):
                 hydra configuration which specifies all the needed information to run the training experiment
@@ -47,9 +47,9 @@ class TrainingExperiment(Experiment):
             project_name (str):
                 name of the project that is used when wandb logger is employed
         """
-        
+
         super().__init__(cfg, **kwargs)
-        
+
         self.logger = None
         if logger:
             if logger == 'wandb':
@@ -71,26 +71,26 @@ class TrainingExperiment(Experiment):
                     logger = SummaryWriter("tensorboard/"+project_name+'_'+hparams['model']['name']+'_'+hparams['data']['name'])
                     self.logger = logger
                     self.logger.add_text('Hyperparameters/config',str(hparams))
-                    
+
             else:
                 raise ValueError("{} logger currently unsupported".format(logger))
 
     def _run(self, rank: int = -1, world_size: int = -1) -> None:
         """
         Executes the whole training experiment
-        
+
         Args:
             rank (int):
                 local rank (anticipating on future uses of the codebase for data parallelized simulations)
             world_size (int):
                 number of devices at use (same remark as above)
         """
-        
+
         if self.device != 'cpu':
-            device = torch.device('cuda:'+ str(self.device) if torch.cuda.is_available() else 'cpu')  
+            device = torch.device('cuda:'+ str(self.device) if torch.cuda.is_available() else 'cpu')
         else:
             device = torch.device('cpu')
-        
+
         train_loader, val_loader = getDataLoaders(
             self.cfg.data.name,
             **self.cfg.data.config,
@@ -98,9 +98,9 @@ class TrainingExperiment(Experiment):
             world_size = world_size,
             rank = rank
         )
-        
+
         input_size, output_size = self.cfg.data.config.input_size, self.cfg.data.config.output_size
-        
+
         model = getModel(
             self.cfg.model.name,
             self.cfg.model,
@@ -108,7 +108,7 @@ class TrainingExperiment(Experiment):
             input_size = input_size,
             num_classes = output_size,
         ).to(device)
-                
+
         algorithm = getAlgorithm(self.cfg.algorithm.name, self.cfg.algorithm.config)
         criterion  = getCriterion(self.cfg.trainer.criterion).to(device)
         optimizer = getOptimizer(model, **self.cfg.trainer.optimizer, rank=rank)
@@ -124,7 +124,7 @@ class TrainingExperiment(Experiment):
         wct = []
 
         start_time = time.time()
-        
+
         for epoch in range(start_epoch, self.cfg.trainer.epochs):
             top1_t_, top5_t_, train_loss = train(train_loader, model, algorithm, criterion, device, optimizer, scheduler, rank, epoch)
             top1_v_, top5_v_, val_loss = validate(val_loader, model, criterion, device, rank)
@@ -133,7 +133,7 @@ class TrainingExperiment(Experiment):
             top5_t += [top5_t_]
             top1_v += [top1_v_]
             top5_v += [top5_v_]
-            
+
             wct = time.time() - start_time
 
             if self.logger:
@@ -142,21 +142,21 @@ class TrainingExperiment(Experiment):
                     self.logger.add_scalar('train5_acc', top5_t_, epoch)
                     self.logger.add_scalar('val_acc', top1_v_, epoch)
                     self.logger.add_scalar('val5_acc', top5_v_, epoch)
-                    self.logger.add_scalar('wct', wct, epoch)        
+                    self.logger.add_scalar('wct', wct, epoch)
                     self.logger.add_scalar('train_loss', train_loss, epoch)
                     self.logger.add_scalar('val_loss', val_loss, epoch)
                 else:
                     self.logger.log({'top1_train': top1_t_, 'top5_train': top5_t_, 'top1_val': top1_v_, 'top5_val': top5_v_, 'wct': wct})
 
                 if self.save and top1_v_ > best:
-                    save(model, optimizer, scheduler, epoch + 1, top1_t, top5_t, top1_v, top5_v, wct) 
-        
+                    save(model, optimizer, scheduler, epoch + 1, top1_t, top5_t, top1_v, top5_v, wct)
+
         if rank > -1: cleanup()
 
     def log_hparams_tb(self, hparams: DictConfig) -> None:
         """
         Logs hyperparameters into Tensorboard
-        
+
         Args:
             hparams (DictConfig): hydra config object containing hyperparameters
         """
