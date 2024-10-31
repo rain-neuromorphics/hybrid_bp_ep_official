@@ -16,7 +16,7 @@ algorithm:
 model:
     config:
         T1: 1580
-        activation: 0.45
+        activation: 0.55
         tol: 1e-4
 trainer:
     epochs: 100
@@ -27,7 +27,7 @@ trainer:
             T_max: 100 
             eta_min: 1e-6
 config:  
-    logger: wandb
+    logger: null
     device: 0
     multiprocessing: false
     save: false

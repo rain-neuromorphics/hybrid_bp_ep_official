@@ -7,6 +7,8 @@ import time
 from omegaconf import DictConfig, OmegaConf
 from typing import Optional
 from . import Experiment
+from torch.utils.tensorboard import SummaryWriter
+import wandb
 
 class TrainingExperiment(Experiment):
     """

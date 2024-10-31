@@ -37,7 +37,7 @@ blocks_config:
             - 1
             - 1            
         norm: "b"
-        pools: "m--"
+        pools: "---"
         alphas:
             - 0.99
             - 0.99
@@ -46,7 +46,7 @@ blocks_config:
         fc: []
     
     # Second block
-    -   size: 16
+    -   size: 32
         channel: 128
         channels:
             - 128
@@ -72,11 +72,11 @@ blocks_config:
             - 0.99
         norm: "b"
         # pools: "-m-"
-        pools: "--m"
+        pools: "m--"
         fc: []
 
     # Third block
-    -   size: 8
+    -   size: 16
         channel: 256
         channels:
             - 256
@@ -106,7 +106,7 @@ blocks_config:
         fc: []
 
     # Fourth block
-    -   size: 4
+    -   size: 8
         channel: 512
         channels:
             - 512
@@ -131,6 +131,6 @@ blocks_config:
             - 0.99
             - 0.99
         norm: "b"
-        pools: "---"
+        pools: "m--"
         fc: 
             - 10
