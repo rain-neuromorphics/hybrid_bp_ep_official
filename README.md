@@ -1,3 +1,5 @@
+<img src=/images/logo_github.png  width="30%" height="15%">
+
 # Towards training digitally tied analog blocks via hybrid gradient computation
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <p float="left">
