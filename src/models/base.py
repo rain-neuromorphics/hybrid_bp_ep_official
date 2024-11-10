@@ -173,7 +173,7 @@ class HopfieldBlock(nn.Module, metaclass=HopfieldBlockMeta):
         neurons: List[Tensor],
         num_iterations: int,
         cache_x: bool = False,
-        tol: bool = False,
+        tol: bool = True,
         **kwargs
     ) -> List[Tensor]:
         """
@@ -193,7 +193,7 @@ class HopfieldBlock(nn.Module, metaclass=HopfieldBlockMeta):
             neurons (List[Tensor]): updated block neurons
         """
         
-        tol = tol and self.tol
+        tol = tol and self.tol is not None
         for i in range(num_iterations):
             neurons_tmp = self.stepper(self, x, neurons[:], **kwargs)
             if tol and self._converged(neurons_tmp, neurons):
